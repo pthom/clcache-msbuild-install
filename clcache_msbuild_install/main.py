@@ -53,7 +53,7 @@ def installClcache():
     if not status:
         return False
     if not env_utils.hasProgramInPath("clcache"):
-        print("Humm. its seems that the install failed")
+        print("Humm. its seems that the install failed. Please check that PYTHONHOME\\Scripts is in your PATH ?")
         return False
     return True
 
@@ -135,11 +135,6 @@ def makeInitialChecks():
         print("Bad pip version : this program needs pip for python 3")
         return False
 
-    pipScriptsDir = env_utils.pipScriptsDir()
-    if pipScriptsDir.lower() not in env_utils.readPathFromRegistry().lower():
-        print("Can't find pip_scripts_dir in your PATH. pip_scripts_dir=" + pipScriptsDir)
-        print("Please add this to your PATH")
-        return False
     return True
 
 
