@@ -81,6 +81,10 @@ def hasProgramInPath(prog):
     return result == 0
 
 
+def hasDir(folder):
+    return os.path.isdir(folder)
+
+
 def whereProgram(prog: str) -> str:
     allProgrs = subprocess.check_output("where " + prog).decode("utf-8")
     firstProg = allProgrs.split("\r")[0]

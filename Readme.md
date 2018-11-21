@@ -1,11 +1,37 @@
-# install_clcache_msbuild
+# clcache msbuid install utility
 
-Since the integration of `clcache` with `msbuild` is rather cumbersome, 
-this script provide an helper in order to simplify the process.
+Quick and easy integration of clcache with msbuild and Visual Studio.
+
+
+This repository is an helper tool in order to easily integrate [clcache][1] with msbuild, so that it can be used from inside Visual Studio, or using cmake's "Visual Studio" generators. 
 
 It is compatible with MSVC 2010, 2015 and 2017 (tested with MSVC 2015 and 2017).
 
-## What this script does:
+ Notes: 
+ * [clcache][1] is a compiler cache for `cl.exe`, much like ccache for gcc and clang
+ * My tests showed that on a project with 600000 lines of code, it can reduce the compilation time from 25 minutes down to 4 minutes, when doing a full rebuild with no source modifications (i.e only cache hits)
+
+### Difference with the original clcache
+
+The original clcache has issues with incremental builds, when used in conjonction with msbuild. You will always get a full rebuild even if you modify only one file ! There is a pull request that succesfully correct this here: https://github.com/frerich/clcache/pull/319/commits
+
+This tool uses a fork (https://github.com/pthom/clcache/tree/clcache-msbuild-install), which contains this correction.
+
+# Usage
+
+## Prerequisites
+* python 3 and pip 3 must be installed and in your PATH. The pip scripts must also be in your PATH (PYTHONHOME\\Scripts).
+* At least one install of Visual Studio (2010 to 2017)
+
+## Install python requirements
+
+```bash
+git clone https://github.com/pthom/clcache-msbuild-install.git
+cd clcache-msbuild-install
+pip install -r requirements.txt
+```
+
+## What this tool does:
 
 * Check that python3 and pip3 are installed and are in the PATH
 * Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)
@@ -73,9 +99,10 @@ Actions summary:
     show_cl_list   : List available cl.exe compilers
     select_cl      : Choose which cl.exe to activate
 
-What this script does:
-**********************
+What this tool does:
+********************
 
+* grab a copy of clcache from a fork that includes a patch  for msbuild (https://github.com/pthom/clcache/tree/feature/install_for_msbuild)
 * Check that python3 and pip3 are installed and are in the PATH
 * Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)
 * Call `pip install .` from the repo and check that clcache is then in the PATH.
@@ -168,14 +195,6 @@ clcache.py v4.1.0-dev
 
 # Caveats with msbuild and clcache : 
 
-## incremental builds with clcache and msbuild
-
-clcache has serious isses with incremental builds. After a full build, you will always get a full rebuild even if you modify only one file !
-
-There is a pull request that succesfully correct this here: https://github.com/frerich/clcache/pull/319/commits
-
-
-
 ## clcache is not compatible with `/Zi` debug information format : use `/Z7` instead.
 
 See 
@@ -195,3 +214,4 @@ With cmake, you can do the following:
   endif()
   ````
 
+[1]: https://github.com/frerich/clcache

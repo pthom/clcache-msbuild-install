@@ -5,9 +5,10 @@ import winshell
 import env_utils
 import locate_cl_exe
 
-
+CLCACHE_REPO = "https://github.com/pthom/clcache.git"
+CLCACHE_BRANCH = "clcache-msbuild-install"
 THIS_DIR = env_utils.fileDirNameAbsolute(__file__)
-CLCACHE_REPO_DIR = env_utils.dirNameAbsolute(THIS_DIR + "\\..")
+CLCACHE_REPO_DIR = env_utils.dirNameAbsolute(THIS_DIR + "\\..\\clcache")
 MSBUILD_USER_SETTINGS_DIR = env_utils.appDataPathLocal() + "\\Microsoft\\MSBuild\\v4.0"
 MSBUILD_SETTING_FILE_CONTENT_CLCACHE = """<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -33,6 +34,18 @@ MSBUILD_SETTING_FILE_CONTENT_NO_CLCACHE = """<?xml version="1.0" encoding="utf-8
   <ItemGroup />
 </Project>
 """
+
+
+def cloneClCache():
+    env_utils.showFunctionIntro("Clone and update clcache repo")
+    if not env_utils.hasDir(CLCACHE_REPO_DIR):
+        if not env_utils.callAndShowCmd("git clone " + CLCACHE_REPO, cwd=THIS_DIR + "\\.."):
+            return False
+    if not env_utils.callAndShowCmd("git checkout " + CLCACHE_BRANCH, cwd=CLCACHE_REPO_DIR):
+        return False
+    if not env_utils.callAndShowCmd("git pull", cwd=CLCACHE_REPO_DIR):
+        return False
+    return True
 
 
 def installClcache():
@@ -134,6 +147,21 @@ def makeInitialChecks():
 def selectCl():
     env_utils.showFunctionIntro("Select cl compiler:")
     clExesList = locate_cl_exe.findClExesList()
+    help = """Below is the list of the available cl.exe versions for your different installations 
+of Microsoft Visual Studio.
+    Notes: 
+    * Versions
+        - Version 10.0 corresponds to MSVC 2010
+        - Version 11.0 corresponds to MSVC 2012
+        - Version 12.0 corresponds to MSVC 2013
+        - Version 14.0 corresponds to MSVC 2015
+        - Versions 15.* correspond to MSVC 2017
+    * targetArch is the arch you are targeting
+    * hostArch is the arch of your installation of Visual Studio 
+      (select x86 most of the times)
+    * the folder presented below are somewhat abbreviated
+    """
+    print(help)
     locate_cl_exe.printClList(clExesList)
     while True:
         answer = input("Enter the number corresponding to the desired compiler: ")
@@ -153,6 +181,8 @@ def selectCl():
 
 
 def fullClcacheSetup():
+    if not cloneClCache():
+        return False
     if not installClcache():
         return False
     if not selectCl():
@@ -215,6 +245,8 @@ def main():
     disable_logs   : Disable clcache logs during builds
     show_cl_list   : List available cl.exe compilers
     select_cl      : Choose which cl.exe to activate
+    clone_clcache  : Clone clcache in the clcache/ subfolder 
+                     (this step is done automatically during install)
 
 What this script does:
 **********************
@@ -254,7 +286,7 @@ between different MSVC installations, clcache will be activated for all instance
                "enable", "disable",
                "enable_server", "disable_server",
                "enable_logs", "disable_logs",
-               "show_cl_list", "select_cl"]
+               "show_cl_list", "select_cl", "clone_clcache"]
     parser.add_argument("action", choices=choices, help="action")
     parser.add_argument("--cachedir", help="clcache directory")
     parser.add_argument("--cache_size", help="clcache size in Go", type=int, default=0)
@@ -296,9 +328,11 @@ between different MSVC installations, clcache will be activated for all instance
         locate_cl_exe.printClList(locate_cl_exe.findClExesList())
         return True
     elif args.action == "select_cl":
-        selectCl()
-        return True
-
+        if not selectCl():
+            return False
+    elif args.action == "clone_clcache":
+        if not cloneClCache():
+            return False
     if args.cachedir is not None:
         env_utils.setAndStoreEnvVariable("CLCACHE_DIR", args.cachedir)
 

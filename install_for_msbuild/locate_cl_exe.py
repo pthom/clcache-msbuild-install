@@ -51,7 +51,7 @@ def implFindMsvcUpTo2015() -> typing.List[MsvcInstall]:
 
 
 def implFindMsvc2017() -> typing.List[MsvcInstall]:
-    jsonStr = env_utils.callCmdGetOutput(THIS_DIR + "\\vswhere.exe -format json")
+    jsonStr = env_utils.callCmdGetOutput(THIS_DIR + "\\..\\vswhere.exe -format json")
     jsonData = json.loads(jsonStr)
     result = []
     for entry in jsonData:
