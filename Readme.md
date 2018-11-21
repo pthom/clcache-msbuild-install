@@ -23,7 +23,7 @@ This tool uses a fork (https://github.com/pthom/clcache/tree/clcache-msbuild-ins
 * python 3 and pip 3 must be installed and in your PATH. The pip scripts must also be in your PATH (PYTHONHOME\\Scripts).
 * At least one install of Visual Studio (2010 to 2017)
 
-## Install python requirements
+## Installation
 
 ```bash
 git clone https://github.com/pthom/clcache-msbuild-install.git
@@ -31,38 +31,21 @@ cd clcache-msbuild-install
 pip install -r requirements.txt
 ```
 
-## What this tool does:
-* Clone clcache (into clcache/)
-* Check that python3 and pip3 are installed and are in the PATH
-* Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)
-* Call `pip install .` from the ./clcache and check that clcache is then in the PATH.
-  `clcache` will subsequently be used from the PYTHONHOME\\Scripts directory.
-* Modify the user msbuild preference files inside `%AppData%\..\Local\Microsoft\MSBuild\v4.0`
-  so that clcache becomes the default compiler. (These prefs are shared between MSVC 2010 to 2017).
-* Find all cl.exes version on your computer (for MSVC 2010 to MSVC 2017), and allows you 
-  to select the correct one, by showing a detailed list of their version and target architecture.
-* Set the env variable `CLCACHE_CL` with the correct path to cl.exe
-
-As additional options, this script can also 
-* change the cache location
-* change the cache size
-* change the timeout CLCACHE_OBJECT_CACHE_TIMEOUT_MS
-
-## Caveat 
-Since the msbuild preference files inside `%AppData%\..\Local\Microsoft\MSBuild\v4.0` are shared
-between different MSVC installations, clcache will be activated for all instances of MSVC.
-
-## Note
-`vswhere.exe` is a tool provided by Microsoft in order to locate installations of MSVC >= 2017.
-
 ## Usage & help
 
+### One step 
+The easiest way to use it is :
 ````
-> python -m clcache_msbuild_install -h
-usage: python -m clcache_msbuild_install [-h] [--cachedir CACHEDIR]
-                                         [--cache_size CACHE_SIZE]
-                                         [--clcache_timeout CLCACHE_TIMEOUT]
-                                         {status,install,enable,disable,enable_server,disable_server,enable_logs,disable_logs,show_cl_list,select_cl,clone_clcache}
+python path\to\clcache-msbuild-install\main.py install
+````
+
+### Detailed usage
+````
+> python path\to\clcache-msbuild-install\main.py -h
+usage: python clcache-msbuild-install\main.py [-h] [--cachedir CACHEDIR]
+                                              [--cache_size CACHE_SIZE]
+                                              [--clcache_timeout CLCACHE_TIMEOUT]
+                                              {status,install,enable,disable,enable_server,disable_server,enable_logs,disable_logs,show_cl_list,select_cl,clone_clcache}
 
 Configure clcache for use with msbuild
 
@@ -101,37 +84,39 @@ Actions summary:
     clone_clcache  : Clone clcache in the clcache/ subfolder
                      (this step is done automatically during install)
 
-What this tool does:
-********************
+````
 
+## What this tool does:
+* Clone clcache (into clcache/)
 * Check that python3 and pip3 are installed and are in the PATH
 * Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)
-* Call `pip install .` from the repo and check that clcache is then in the PATH.
+* Call `pip install .` from the ./clcache and check that clcache is then in the PATH.
   `clcache` will subsequently be used from the PYTHONHOME\\Scripts directory.
-* Modify the user msbuild preference files inside `C:\Users\pascal\AppData\Local\Microsoft\MSBuild\v4.0`
+* Modify the user msbuild preference files inside `%AppData%\..\Local\Microsoft\MSBuild\v4.0`
   so that clcache becomes the default compiler. (These prefs are shared between MSVC 2010 to 2017).
-* Find all cl.exes version on your computer (for MSVC 2010 to MSVC 2017), and allows you
+* Find all cl.exes version on your computer (for MSVC 2010 to MSVC 2017), and allows you 
   to select the correct one, by showing a detailed list of their version and target architecture.
 * Set the env variable `CLCACHE_CL` with the correct path to cl.exe
 
-As additional options, this script can also
+As additional options, this script can also 
 * change the cache location
 * change the cache size
 * change the timeout CLCACHE_OBJECT_CACHE_TIMEOUT_MS
 
-Caveat
-******
-since the msbuild preference files inside `C:\Users\pascal\AppData\Local\Microsoft\MSBuild\v4.0` are shared
+## Caveat 
+Since the msbuild preference files inside `%AppData%\..\Local\Microsoft\MSBuild\v4.0` are shared
 between different MSVC installations, clcache will be activated for all instances of MSVC.
 
-````
+## Note
+`vswhere.exe` is a tool provided by Microsoft in order to locate installations of MSVC >= 2017.
+
 
 
 
 # Sample usage session:
 
 ````
-> python -m clcache_msbuild_install install
+> python path\to\clcache-msbuild-install\main.py install
 Looking for python in PATH
 C:\Python36-32\python.exe
 Looking for pip in PATH

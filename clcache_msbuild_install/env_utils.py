@@ -8,17 +8,17 @@ import platform
 # import winshell
 from win32com.client import Dispatch
 
-def createShortcut(src_file, dst_shortcut_path):
-    path = os.path.join(dst_shortcut_path)
-    wDir = os.path.dirname(src_file)
-    icon = src_file
+def createShortcut(srcFile, dstShortcutPath):
+    path = os.path.join(dstShortcutPath)
+    wDir = os.path.dirname(srcFile)
+    icon = srcFile
     shell = Dispatch('WScript.Shell')
     shortcut = shell.CreateShortCut(path)
-    shortcut.Targetpath = src_file
+    shortcut.Targetpath = srcFile
     shortcut.WorkingDirectory = wDir
     shortcut.IconLocation = icon
     shortcut.save()
-    print("Created shortcut : {} points to {}".format(dst_shortcut_path, src_file))
+    print("Created shortcut : {} points to {}".format(dstShortcutPath, srcFile))
 
 
 def removeFile(filename):

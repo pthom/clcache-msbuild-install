@@ -280,7 +280,7 @@ between different MSVC installations, clcache will be activated for all instance
         description="Configure clcache for use with msbuild",
         epilog=epilog,
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        prog = "python -m clcache_msbuild_install"
+        prog="python clcache-msbuild-install\main.py"
         )
     choices = ["status", "install",
                "enable", "disable",
