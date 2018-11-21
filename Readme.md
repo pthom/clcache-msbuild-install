@@ -11,6 +11,8 @@ It is compatible with MSVC 2010, 2015 and 2017 (tested with MSVC 2015 and 2017).
  * [clcache][1] is a compiler cache for `cl.exe`, much like ccache for gcc and clang
  * My tests showed that on a project with 600000 lines of code, it can reduce the compilation time from 25 minutes down to 4 minutes, when doing a full rebuild with no source modifications (i.e only cache hits)
 
+[1]: https://github.com/frerich/clcache
+
 ### Difference with the original clcache
 
 The original clcache has issues with incremental builds, when used in conjonction with msbuild. You will always get a full rebuild even if you modify only one file ! There is a pull request that succesfully correct this here: https://github.com/frerich/clcache/pull/319/commits
@@ -20,7 +22,7 @@ This tool uses a fork (https://github.com/pthom/clcache/tree/clcache-msbuild-ins
 # Usage
 
 ## Prerequisites
-* python 3 and pip 3 must be installed and in your PATH. The pip scripts must also be in your PATH (PYTHONHOME\\Scripts).
+* python 3 and pip 3 **32 bits** must be installed and in your PATH. The pip scripts must also be in your PATH (PYTHONHOME\\Scripts).
 * At least one install of Visual Studio (2010 to 2017)
 
 ## Installation
@@ -88,7 +90,7 @@ Actions summary:
 
 ## What this tool does:
 * Clone clcache (into clcache/)
-* Check that python3 and pip3 are installed and are in the PATH
+* Check that python3 and pip3 are installed and are in the PATH, and check that they are 32 bits versions.
 * Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)
 * Call `pip install .` from the ./clcache and check that clcache is then in the PATH.
   `clcache` will subsequently be used from the PYTHONHOME\\Scripts directory.
@@ -215,7 +217,7 @@ and https://stackoverflow.com/questions/284778/what-are-the-implications-of-usin
 With cmake, you can do the following:
 
 
-  ```cmake
+````cmake
   message("msvc_clccache_force_z7_debug_format use /Z7 debug format")
   if(MSVC)
     string(REGEX REPLACE "/Z[iI7]" ""
@@ -223,6 +225,13 @@ With cmake, you can do the following:
            "${CMAKE_CXX_FLAGS_DEBUG}")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Z7")
   endif()
-  ````
+````
 
-[1]: https://github.com/frerich/clcache
+
+## python 32 bits is required (even on a 64 bits OS)
+
+Please make sure that the default python in your path is a 32 bits version:
+this is due to the fact that MSVC and msbuild is itself a 32 bits program, and 
+clcache needs to communicate with msbuild via a 32 bits dll (FileTracker.dll)
+
+Trust me, I am as disappointed as you.
