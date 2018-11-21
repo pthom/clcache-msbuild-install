@@ -2,8 +2,8 @@
 import sys
 import argparse
 import winshell
-import env_utils
-import locate_cl_exe
+from . import env_utils
+from . import locate_cl_exe
 
 CLCACHE_REPO = "https://github.com/pthom/clcache.git"
 CLCACHE_BRANCH = "clcache-msbuild-install"
@@ -147,7 +147,7 @@ def makeInitialChecks():
 def selectCl():
     env_utils.showFunctionIntro("Select cl compiler:")
     clExesList = locate_cl_exe.findClExesList()
-    help = """Below is the list of the available cl.exe versions for your different installations 
+    helpStr = """Below is the list of the available cl.exe versions for your different installations
 of Microsoft Visual Studio.
     Notes: 
     * Versions
@@ -161,7 +161,7 @@ of Microsoft Visual Studio.
       (select x86 most of the times)
     * the folder presented below are somewhat abbreviated
     """
-    print(help)
+    print(helpStr)
     locate_cl_exe.printClList(clExesList)
     while True:
         answer = input("Enter the number corresponding to the desired compiler: ")
@@ -280,7 +280,8 @@ between different MSVC installations, clcache will be activated for all instance
     parser = argparse.ArgumentParser(
         description="Configure clcache for use with msbuild",
         epilog=epilog,
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        prog = "python -m clcache_msbuild_install"
         )
     choices = ["status", "install",
                "enable", "disable",

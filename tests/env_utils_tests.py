@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import os.path
-import time
+import sys
 import unittest
 import winshell
-import env_utils
-import locate_cl_exe
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "\\..")
+from clcache_msbuild_install import env_utils as env_utils
+from clcache_msbuild_install import locate_cl_exe as locate_cl_exe
 
 class EnvUtilsTests(unittest.TestCase):
     def testEnvVars(self):

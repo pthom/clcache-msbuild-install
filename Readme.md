@@ -58,7 +58,7 @@ between different MSVC installations, clcache will be activated for all instance
 ## Usage & help
 
 ````
-> python install_for_msbuild/install_clcache_msbuild.py -h
+> python -m clcache_msbuild_install -h
 usage: install_clcache_msbuild.py [-h] [--cachedir CACHEDIR]
                                   [--cache_size CACHE_SIZE]
                                   [--clcache_timeout CLCACHE_TIMEOUT]
@@ -102,7 +102,7 @@ Actions summary:
 What this tool does:
 ********************
 
-* grab a copy of clcache from a fork that includes a patch  for msbuild (https://github.com/pthom/clcache/tree/feature/install_for_msbuild)
+* clone clcache from a fork that includes a patch for msbuild (https://github.com/pthom/clcache/tree/feature/clcache-msbuild-install)
 * Check that python3 and pip3 are installed and are in the PATH
 * Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)
 * Call `pip install .` from the repo and check that clcache is then in the PATH.
@@ -128,7 +128,7 @@ between different MSVC installations, clcache will be activated for all instance
 Sample usage session:
 
 ````bash
-> python install_clcache_msbuild.py install
+> python -m clcache_msbuild_install install
 Looking for python in PATH
 C:\Python36-32\python.exe
 Looking for pip in PATH

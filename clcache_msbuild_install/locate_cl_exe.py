@@ -4,9 +4,10 @@ import json
 import typing
 import os.path
 import os
-import env_utils
+from . import env_utils
 
 THIS_DIR = env_utils.fileDirNameAbsolute(__file__)
+
 
 class MsvcInstall(object):
     version: str
