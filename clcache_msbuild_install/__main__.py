@@ -1,3 +1,3 @@
-from . import install_clcache_msbuild
+from . import install
 if __name__ == "__main__":
-    install_clcache_msbuild.main()
+    install.main()

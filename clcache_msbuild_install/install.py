@@ -1,4 +1,3 @@
-
 import sys
 import argparse
 import winshell
@@ -248,8 +247,8 @@ def main():
     clone_clcache  : Clone clcache in the clcache/ subfolder 
                      (this step is done automatically during install)
 
-What this script does:
-**********************
+What this tool does:
+********************
 
 * Check that python3 and pip3 are installed and are in the PATH
 * Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)

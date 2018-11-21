@@ -1,4 +1,4 @@
-# clcache msbuid install utility
+# clcache msbuild install utility
 
 Quick and easy integration of clcache with msbuild and Visual Studio.
 
@@ -32,10 +32,10 @@ pip install -r requirements.txt
 ```
 
 ## What this tool does:
-
+* Clone clcache (into clcache/)
 * Check that python3 and pip3 are installed and are in the PATH
 * Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)
-* Call `pip install .` from the repo and check that clcache is then in the PATH.
+* Call `pip install .` from the ./clcache and check that clcache is then in the PATH.
   `clcache` will subsequently be used from the PYTHONHOME\\Scripts directory.
 * Modify the user msbuild preference files inside `%AppData%\..\Local\Microsoft\MSBuild\v4.0`
   so that clcache becomes the default compiler. (These prefs are shared between MSVC 2010 to 2017).
@@ -59,15 +59,15 @@ between different MSVC installations, clcache will be activated for all instance
 
 ````
 > python -m clcache_msbuild_install -h
-usage: install_clcache_msbuild.py [-h] [--cachedir CACHEDIR]
-                                  [--cache_size CACHE_SIZE]
-                                  [--clcache_timeout CLCACHE_TIMEOUT]
-                                  {status,install,enable,disable,enable_server,disable_server,enable_logs,disable_logs,show_cl_list,select_cl}
+usage: python -m clcache_msbuild_install [-h] [--cachedir CACHEDIR]
+                                         [--cache_size CACHE_SIZE]
+                                         [--clcache_timeout CLCACHE_TIMEOUT]
+                                         {status,install,enable,disable,enable_server,disable_server,enable_logs,disable_logs,show_cl_list,select_cl,clone_clcache}
 
 Configure clcache for use with msbuild
 
 positional arguments:
-  {status,install,enable,disable,enable_server,disable_server,enable_logs,disable_logs,show_cl_list,select_cl}
+  {status,install,enable,disable,enable_server,disable_server,enable_logs,disable_logs,show_cl_list,select_cl,clone_clcache}
                         action
 
 optional arguments:
@@ -98,11 +98,12 @@ Actions summary:
     disable_logs   : Disable clcache logs during builds
     show_cl_list   : List available cl.exe compilers
     select_cl      : Choose which cl.exe to activate
+    clone_clcache  : Clone clcache in the clcache/ subfolder
+                     (this step is done automatically during install)
 
 What this tool does:
 ********************
 
-* clone clcache from a fork that includes a patch for msbuild (https://github.com/pthom/clcache/tree/feature/clcache-msbuild-install)
 * Check that python3 and pip3 are installed and are in the PATH
 * Check that the pip installed scripts are in the PATH (PYTHONHOME\Scripts)
 * Call `pip install .` from the repo and check that clcache is then in the PATH.
@@ -125,9 +126,11 @@ between different MSVC installations, clcache will be activated for all instance
 
 ````
 
-Sample usage session:
 
-````bash
+
+# Sample usage session:
+
+````
 > python -m clcache_msbuild_install install
 Looking for python in PATH
 C:\Python36-32\python.exe
@@ -135,34 +138,50 @@ Looking for pip in PATH
 C:\Python36-32\Scripts\pip.exe
 
 ######################################################################
+Clone and update clcache repo (cloneClCache)
+######################################################################
+====> git checkout clcache-msbuild-install(in folder F:\dvp\OpenSource\clcache-msbuild-install\clcache)
+Already on 'clcache-msbuild-install'
+Your branch is up to date with 'origin/clcache-msbuild-install'.
+====> git pull(in folder F:\dvp\OpenSource\clcache-msbuild-install\clcache)
+Already up to date.
+
+######################################################################
 Installing clcache (installClcache)
 ######################################################################
-====> pip install .(in folder F:\dvp\OpenSource\clcache)
-Processing f:\dvp\opensource\clcache
-Requirement already satisfied: pymemcache in c:\python36-32\lib\site-packages (from clcache==4.1.1.dev65+g105e486.d20181119) (2.0.0)
-Requirement already satisfied: pyuv in c:\python36-32\lib\site-packages (from clcache==4.1.1.dev65+g105e486.d20181119) (1.4.0)
-Requirement already satisfied: six in c:\python36-32\lib\site-packages (from pymemcache->clcache==4.1.1.dev65+g105e486.d20181119) (1.11.0)
+====> pip install .(in folder F:\dvp\OpenSource\clcache-msbuild-install\clcache)
+Processing f:\dvp\opensource\clcache-msbuild-install\clcache
+Requirement already satisfied: pymemcache in c:\python36-32\lib\site-packages (from clcache==4.1.1.dev72+g09a364c) (2.0.0)
+Requirement already satisfied: pyuv in c:\python36-32\lib\site-packages (from clcache==4.1.1.dev72+g09a364c) (1.4.0)
+Requirement already satisfied: six in c:\python36-32\lib\site-packages (from pymemcache->clcache==4.1.1.dev72+g09a364c) (1.11.0)
 Installing collected packages: clcache
-  Found existing installation: clcache 4.1.1.dev65+g105e486.d20181119
-    Uninstalling clcache-4.1.1.dev65+g105e486.d20181119:
-      Successfully uninstalled clcache-4.1.1.dev65+g105e486.d20181119
+  Found existing installation: clcache 4.1.1.dev72+g09a364c
+    Uninstalling clcache-4.1.1.dev72+g09a364c:
+      Successfully uninstalled clcache-4.1.1.dev72+g09a364c
   Running setup.py install for clcache ... done
-Successfully installed clcache-4.1.1.dev65+g105e486.d20181119
+Successfully installed clcache-4.1.1.dev72+g09a364c
 You are using pip version 10.0.1, however version 18.1 is available.
 You should consider upgrading via the 'python -m pip install --upgrade pip' command.
 Looking for clcache in PATH
 C:\Python36-32\Scripts\clcache.exe
 
 ######################################################################
-Force clcache via Msbbuild user settings (copyMsvcPrefClcache)
-######################################################################
-Wrote pref in C:\Users\pascal\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.ARM.user.props
-Wrote pref in C:\Users\pascal\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.Win32.user.props
-Wrote pref in C:\Users\pascal\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.x64.user.props
-
-######################################################################
 Select cl compiler: (selectCl)
 ######################################################################
+Below is the list of the available cl.exe versions for your different installations
+of Microsoft Visual Studio.
+    Notes:
+    * Versions
+        - Version 10.0 corresponds to MSVC 2010
+        - Version 11.0 corresponds to MSVC 2012
+        - Version 12.0 corresponds to MSVC 2013
+        - Version 14.0 corresponds to MSVC 2015
+        - Versions 15.* correspond to MSVC 2017
+    * targetArch is the arch you are targeting
+    * hostArch is the arch of your installation of Visual Studio
+      (select x86 most of the times)
+    * the folder presented below are somewhat abbreviated
+
    #           version targetArch   hostArch                                                              folder (shortened)
    1              14.0      amd64      amd64                                               C:\ProgX86\MSVC 14.0\vc\bin\amd64
    2              14.0        arm      amd64                                           C:\ProgX86\MSVC 14.0\vc\bin\amd64_arm
@@ -181,6 +200,13 @@ Selected : C:\Program Files (x86)\Microsoft Visual Studio 14.0\vc\bin\cl.exe
 SUCCESS: Specified value was saved.
 
 ######################################################################
+Force clcache via Msbbuild user settings (copyMsvcPrefClcache)
+######################################################################
+Wrote pref in C:\Users\pascal\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.ARM.user.props
+Wrote pref in C:\Users\pascal\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.Win32.user.props
+Wrote pref in C:\Users\pascal\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.x64.user.props
+
+######################################################################
 Note about clcache usage: (showClCacheUsage)
 ######################################################################
 ====> clcache --help
@@ -191,7 +217,7 @@ clcache.py v4.1.0-dev
   -C        : clear cache
   -z        : reset cache statistics
   -M <size> : set maximum cache size (in bytes)
-````
+  ````
 
 # Caveats with msbuild and clcache : 
 
