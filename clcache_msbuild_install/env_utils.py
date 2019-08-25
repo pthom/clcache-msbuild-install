@@ -46,7 +46,7 @@ def shortDirectoryName(folder):
 
 def isPython32Bits():
     pythonBits = struct.calcsize("P") * 8
-    return False # pythonBits == 32
+    return pythonBits == 32
 
 
 def isOs64bit():
